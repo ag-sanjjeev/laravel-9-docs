@@ -22,8 +22,8 @@
 
 ## Maintenance mode
 
-  `php artisan down --refresh=15` 
-  
+  `php artisan down --refresh=15`
+
   *refresh the page every 15 seconds*
 
   `php artisan down --retry=60`
@@ -572,7 +572,7 @@
   ```
 
   Laravel stores the current CSRF token in the form of an encrypted XSRF-TOKEN as cookie.
-  
+
 ---
 
 # **Controllers:**
@@ -700,14 +700,6 @@
 
 # **Requests:**
 
-## Accessing Requests:
-
-  Get request parameters as follows.
-
-  ```php
-  $name = $request->input('name');
-  ```
-
 ## Retrieving requested path:
 
   ```php
@@ -722,6 +714,359 @@
   if ($request->is('admin/*')) {
     //
   }
+  ```
+## Retrieving Requested URL:
+  Get requested URL without query string.
+
+  ```php
+  $url = $request->url();  
+  ```
+
+  Get requested URL with query string.
+
+  ```php
+  $urlWithQueryString = $request->fullUrl();
+  ```
+
+## Merge query string with requested URL:
+
+  ```php
+  $request->fullUrlWithQuery(['type' => 'article']);
+  ```
+## Retrieve Requested Host:
+
+  ```php
+  $request->host();
+  $request->httpHost();
+  $request->schemeAndHttpHost();
+  ```
+## Retrieve Requested Method:
+
+  Get current requested method.
+  ```php
+  $method = $request->method();
+  ```
+
+  Check current request method.
+  ```php
+  if ($request->isMethod('post')) {
+    //
+  }
+  ```
+
+## Retrieve Requested Headers:
+
+  Get Header value in the request.
+
+  ```php
+  $value = $request->header('X-Header-Name');
+  ```
+
+  Get Header value if it not present retrieve default value.
+
+  ```php
+  $value = $request->header('X-Header-Name', 'default');
+  ```
+
+  Check the request has specific header.
+
+  ```php
+  if ($request->hasHeader('X-Header-Name')) {
+    //
+  }
+  ```
+
+  Get authorization header if present.
+
+  ```php
+  $token = $request->bearerToken();
+  ```
+
+## Get Requested IP Address:
+
+  ```php
+  $ipAddress = $request->ip();
+  ```
+
+## Requested Content Type:
+
+  Get acceptable content type for the request.
+
+  ```php
+  $contentTypes = $request->getAcceptableContentTypes();
+  ```
+
+  Check acceptable content type for the request which returns either `true` or `false`.
+
+  ```php
+  if ($request->accepts(['text/html', 'application/json'])) {
+      // ...
+  }
+  ```
+
+  Checks preferable content type for the request which returns `null` if not present.
+
+  ```php
+  $preferred = $request->prefers(['text/html', 'application/json']);
+  ```
+
+  Checks expected content type for the request which returns either `true` or `false`.
+  This will suitable for most requested type in web applications.
+  
+  ```php
+  if ($request->expectsJson()) {
+    // ...
+  }
+  ```
+
+## PSR-7 Request:
+
+  Laravel supports PSR-7 request type for more see [Laravel-9-documentation](https://laravel.com/docs/9.x/requests#psr7-requests)
+
+## Retrieving All Input Data:
+
+  Get input data as array.
+
+  ```php
+  $input = $request->all();
+  ```
+
+  Get input data as collection.
+  
+  ```php
+  $input = $request->collect();
+  ```
+
+  Get subset incoming request.
+  
+  ```php
+  $request->collect('users')->each(function ($user) {
+    // ...
+  });
+  ```
+
+## Retrieving Input Values:
+
+  Get specific input values from the request.
+
+  ```php
+  $name = $request->input('name');
+  ```
+
+  If input value not present get default value.
+
+  ```php
+  $name = $request->input('name', 'Sally');
+  ```
+
+  Get first index of array input value.
+
+  ```php
+  $name = $request->input('products.0.name');
+  ```
+
+  Get all array input value.
+
+  ```php
+  $names = $request->input('products.*.name');
+  ```
+
+  Get all input values as associative array.
+
+  ```php
+  $input = $request->input();
+  ```
+
+## Retrieving Input From Query:
+
+  Get specific query input value.
+
+  ```php
+  $name = $request->query('name');
+  ```
+
+  Get specific query value when it not present return default value.
+
+  ```php
+  $name = $request->query('name', 'Helen');
+  ```
+
+  Get all query string input value.
+
+  ```php
+  $query = $request->query();
+  ```
+
+## Retrieving JSON Input:
+
+  Get specific input value when JSON request is made.
+
+  ```php
+  $name = $request->input('user.name');
+  ```
+
+## Retrieving String Input:
+
+  Get specific input value when it is a stringable value.
+
+  ```php
+  $name = $request->string('name')->trim();
+  ```
+
+## Retrieving Boolean Input:
+
+  Get specific input value when it is a boolean value.
+
+  ```php
+  $archived = $request->boolean('archived');
+  ```
+
+## Retrieving Data Input:
+
+  Get specific input value when it is a date value.
+
+  ```php
+  $birthday = $request->date('birthday');
+  ```
+
+  Get specific date input with timezone and additional formattings.
+
+  ```php
+  $elapsed = $request->date('elapsed', '!H:i', 'Asia/Kolkata');
+  ```
+
+## Retrieving Input Via Dynamic Property:
+
+  Get specific input value via dynamic property which points form input field name.
+
+  ```php
+  $name = $request->name;
+  ```
+
+## Retrieving Input Portion:
+
+  Get specific portion of input as array or dynamic list of arguments.
+
+  ```php
+  $input = $request->only(['username', 'password']);
+ 
+  $input = $request->only('username', 'password');
+  ```
+
+  Get all portion of input as array or dynamic list of arguments except specific list of input.
+
+  ```php
+  $input = $request->except(['credit_card']);
+ 
+  $input = $request->except('credit_card');
+  ```
+
+## Check Input Exists:
+
+  Check whether input exists or not.
+
+  ```php
+  if ($request->has('name')) {
+    //
+  }
+  ```
+
+  Check specific group of input present or not.
+
+  ```php
+  if ($request->has(['name', 'email'])) {
+    //
+  }
+  ```
+
+  Check any one of specific input group present or not which returns `true` or `false`.
+
+  ```php
+  if ($request->hasAny(['name', 'email'])) {
+      //
+  }
+  ```
+
+  Checks the specific input value not empty or not which returns `true` or `not`.
+
+  ```php
+  if ($request->filled('name')) {
+    //
+  }
+  ```
+
+  Checks if the input key is missing in request which returns `true` or `false`.
+
+  ```php
+  if ($request->missing('name')) {
+      //
+  }
+  ```
+
+  Execute closure when specific input value present.
+
+  ```php
+  $request->whenHas('name', function ($input) {
+    //
+  });
+  ```
+
+  Execute closure when specific input value present and not present conditions.
+
+  ```php
+  $request->whenHas('name', function ($input) {
+    // The "name" value is present...
+  }, function () {
+      // The "name" value is not present...
+  });
+  ```
+
+  Executes closure when input value is not empty.
+
+  ```php
+  $request->whenFilled('name', function ($input) {
+    //
+  });
+  ```
+
+  Execute closure when input value is not empty and empty conditions.
+  
+  ```php
+  $request->whenFilled('name', function ($input) {
+    // The "name" value is filled...
+  }, function () {
+    // The "name" value is not filled...
+  });
+  ```
+
+## Merging Addtional Input:
+
+  Merging additional input values to excisting request.
+
+  ```php
+  $request->merge(['votes' => 0]);
+  ```
+
+  Merging additional input values if the key is missing.
+
+  ```php
+  $request->mergeIfMissing(['votes' => 0]);
+  ```
+
+## Old Input:
+
+  It is useful when handling validation with existing forms to retrieving old form data.
+
+  For more see [Laravel-9-documentation](https://laravel.com/docs/9.x/requests#old-input)
+
+## Flash Input Session:
+
+  The flash method useful to store all input to the flash session until next resquest.
+
+  ```php
+  $request->flashOnly(['username', 'email']);
+ 
+  $request->flashExcept('password');
   ```
 
 ## Checking Named Request Routes:
