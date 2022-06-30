@@ -715,6 +715,17 @@
     //
   }
   ```
+
+## Checking Named Request Routes:
+
+  To check the route name is starting with admin or not.
+
+  ```php
+  if ($request->routeIs('admin.*')) {
+      //
+  }
+  ```
+
 ## Retrieving Requested URL:
   Get requested URL without query string.
 
@@ -1069,14 +1080,106 @@
   $request->flashExcept('password');
   ```
 
-## Checking Named Request Routes:
+## Flash Input Redirection:
 
-  To check the route name is starting with admin or not.
+  Redirecting to previous page with old input by chaining the redirection with flash input.
 
   ```php
-  if ($request->routeIs('admin.*')) {
+  return redirect('form')->withInput();
+  
+  return redirect()->route('user.create')->withInput();
+  
+  return redirect('form')->withInput(
+      $request->except('password')
+  );
+  ```
+
+## Retrieving Old Input:
+
+  Retrieving old input from flash.
+
+  ```php
+  $username = $request->old('username');
+  ```
+
+  ```html
+  <input type="text" name="username" value="{{ old('username') }}">
+  ```
+
+## Retrieving Cookie:
+
+  Retrieving cookie value from request.
+
+  ```php
+  $value = $request->cookie('name');
+  ```
+
+## Input Trimming & Normalization:
+
+  Laravel supports Input Trimming and Normalization for more see [Laravel-9-documentation](https://laravel.com/docs/9.x/requests#input-trimming-and-normalization)
+
+## Retrieving Uploaded File:
+
+  Get uploaded file from request.
+
+  ```php
+  $file = $request->file('photo');
+ 
+  $file = $request->photo;
+  ```
+
+  Check file has uploaded by `hasFile`.
+
+  ```php
+  if ($request->hasFile('photo')) {
       //
   }
   ```
 
+## Validating File Upload:
+
+  Validate file upload has completed without any problem and it checks any uploaded error during request.
+
+  ```php
+  if ($request->file('photo')->isValid()) {
+      //
+  }
+  ```
+
+## File Upload Details:
+
+  Get uploaded file path and extension.
+
+  ```php
+  $path = $request->photo->path();
+ 
+  $extension = $request->photo->extension();
+  ```
+
+## Store Uploaded File:
+
+  Storing uploaded file.
+
+  ```php
+  $path = $request->photo->store('images');
+ 
+  $path = $request->photo->store('images', 's3');
+  ```
+
+  Storing uploaded file in a specific disk name.
+
+  ```php
+  $path = $request->photo->storeAs('images', 'filename.jpg');
+ 
+  $path = $request->photo->storeAs('images', 'filename.jpg', 's3');
+  ```
+
+ ## Configuring Trusted Proxies:
+
+  Laravel supports trust proxies for more see [Laravel-9-documentation](https://laravel.com/docs/9.x/requests#configuring-trusted-proxies )
+ 
+ ## Configuring Trusted Host:
+
+  Laravel supports trust host for more see [Laravel-9-documentation](https://laravel.com/docs/9.x/requests#configuring-trusted-hosts)
+  
 ---
