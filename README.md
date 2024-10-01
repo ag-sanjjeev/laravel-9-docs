@@ -1,3 +1,6 @@
+# Laravel Notes
+This repository contains notes and topics related to Laravel PHP Framework. This is gives some useful comments and code samples. For complete usage, refer offical documentation.   
+
 # **Project Setup:**
 
 ## Laravel Installation:
